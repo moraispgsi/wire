@@ -1,0 +1,17 @@
+{
+"version": "0.1.0",
+"command": "go",
+"isShellCommand": true,
+"showOutput": "always",
+"tasks": [
+{
+"taskName": "gorun",
+"suppressTaskName": true,
+"isBuildCommand": true,
+"args": [
+"run",
+"C:\\Users\\Morai\\Documents\\IPS\\Projeto Final Licenciatura\\Go\\src\\fbp\\server\\main.go"
+]
+}
+]
+}

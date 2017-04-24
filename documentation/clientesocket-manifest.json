@@ -1,0 +1,10 @@
+{
+  "mywebservice": { 
+    "sockets": {
+      "login-service": {
+        "is-interface": true,
+        "interface-uri": "std/user-base/login-interface.json"
+      }
+    }
+  }
+}

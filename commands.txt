@@ -1,0 +1,8 @@
+export GOPATH=~/workspace/golang/
+go install github.com/user/hello
+sudo $GOPATH/bin/hello        
+
+
+var ws = new WebSocket("wss://wire-moraispgsi.c9users.io/websocket");
+ws.addEventListener("message", function(e) {console.log(e);});
+ws.send("create-socket")

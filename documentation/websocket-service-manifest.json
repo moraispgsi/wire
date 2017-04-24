@@ -1,0 +1,33 @@
+{
+  "implemented-interfaces": [
+    {
+      "uri": "std/user-base/login-interface.json",
+      "is-url": false
+    }
+  ],
+  "services": {
+    "login": {
+      "parameters" : {
+        "user-name": "string",
+        "password": "string"
+      },
+      "response": {
+        "header": "login-response",
+        "response": {
+          "status": "integer",
+          "error-message": "string"
+        }
+      } 
+    }
+  },
+  "events": {
+    "login-expired": {
+      "user-name": "string"
+    },
+    "message-received": {
+      "sender-username": "string",
+      "message": "string"
+    }
+  }
+    
+}

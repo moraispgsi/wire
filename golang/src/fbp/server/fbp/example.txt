@@ -1,0 +1,97 @@
+package main
+
+import (
+	"fbp/server/fbp"
+	"fmt"
+	"sync"
+)
+
+func main() {
+
+	net := fbp.NewNetwork()
+	ns1, _ := net.AddComponent(fbp.NewSTDComponent("Pair"))
+	ns2, _ := net.AddComponent(fbp.NewSTDComponent("Compare"))
+	ns3, _ := net.AddComponent(fbp.NewSTDComponent("Pair"))
+	ns4, _ := net.AddComponent(fbp.NewSTDComponent("Split"))
+	ns5, _ := net.AddComponent(fbp.NewSTDComponent("Split"))
+	ns6, _ := net.AddComponent(fbp.NewSTDComponent("Pair"))
+	net.AddInPort("IN1")
+	net.AddInPort("IN3")
+	net.AddOutPort("COMPARISON")
+	net.AddOutPort("RESULT")
+
+	net.Connect(net.GetNamespace(), "IN1", ns5, "IN")
+	net.Connect(ns5, "OUT1", ns6, "IN1")
+	net.Connect(ns5, "OUT2", ns6, "IN2")
+	net.Connect(ns6, "OUT", ns4, "IN")
+	net.Connect(ns4, "OUT1", ns1, "IN1")
+	net.Connect(ns4, "OUT2", ns1, "IN2")
+	net.Connect(ns1, "OUT", ns3, "IN1")
+	net.Connect(net.GetNamespace(), "IN3", ns3, "IN2")
+	net.Connect(ns3, "OUT", ns2, "IN")
+	net.Connect(ns2, "COMPARISON", net.GetNamespace(), "COMPARISON")
+	net.Connect(ns2, "FORWARD", net.GetNamespace(), "RESULT")
+	net.Start()
+
+	go func() {
+		net.Send("IN1", 6)
+		net.Send("IN1", 6)
+		net.Send("IN1", fbp.MakeOpenedBracketIP())
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", fbp.MakeClosedBracketIP())
+		net.Send("IN1", fbp.MakeOpenedBracketIP())
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", 4)
+		net.Send("IN1", fbp.MakeClosedBracketIP())
+		net.Send("IN1", 2)
+		net.Send("IN1", 2)
+		net.CloseInPort("IN1")
+	}()
+
+	go func() {
+		net.Send("IN3", 6)
+		net.Send("IN3", fbp.MakeOpenedBracketIP())
+		net.Send("IN3", 4)
+		net.Send("IN3", 4)
+		net.Send("IN3", 4)
+		net.Send("IN3", 4)
+		net.Send("IN3", fbp.MakeClosedBracketIP())
+		net.Send("IN3", 2)
+		net.CloseInPort("IN3")
+	}()
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for {
+			IP, err := net.Recv("RESULT")
+			if err != nil {
+				return
+			}
+
+			fmt.Println(IP)
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for {
+			IP, err := net.Recv("COMPARISON")
+			if err != nil {
+				fmt.Println("Existing...")
+				return
+			}
+			value := IP.(bool)
+			fmt.Printf("Final: %t\n", value)
+		}
+	}()
+
+	wg.Wait()
+
+}

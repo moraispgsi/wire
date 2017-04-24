@@ -1,0 +1,26 @@
+// https://flowbased.github.io/fbp-protocol/
+
+{
+  "sub-protocol": "runtime",
+  "topic": "getruntime",
+  "payload": {
+    "secret": "SECRET"
+  }
+}
+
+
+
+
+{
+  "sub-protocol": "runtime",
+  "topic": "runtime",
+  "payload": {
+	"type": "",
+	"version": 0.0,
+	"capabilities": [],
+	"allCapabilities": [],
+	"id": "",
+	"label": "",
+	"graph": "",
+  }
+}

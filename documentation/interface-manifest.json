@@ -1,0 +1,24 @@
+{
+  "login-interface": {
+    "services": {
+      "login": {
+        "parameters" : {
+          "user-name": "string",
+          "password": "string"
+        },
+        "response": {
+          "header": "login-response",
+          "response": {
+            "status": "integer",
+            "error-message": "string"
+          }
+        } 
+      }
+    },
+    "events": {
+      "login-expired": {
+        "user-name": "string"
+      }
+    }
+  }
+}
